@@ -26,6 +26,28 @@ router.post('/', async(req, res) =>{
     res.status(201).send()
 })
 
+// To UPDATE data from database to corresponding specific id
+router.put('/:id', async(req, res) =>{
+    const posts = await loadPostsCollections();
+    const corres_id = {_id : new mongodb.ObjectID(req.params.id)}
+    const update = {
+        projectTitle:req.body.projectTitle,
+        projectOwner:req.body.projectOwner,
+        startDate:req.body.startDate,
+        endDate:req.body.endDate,
+        collaborators:req.body.collaborators,
+        description:req.body.description,
+        comments:req.body.comments,
+        createdAt:new Date()
+    }
+    await posts.update(corres_id, update, function(err, res) {
+        if(err) throw err;
+        console.warn("One document updated")
+    })
+    res.stauts(200).send()
+})
+
+
 
 // To DELETE data from database to corresponding specific id
 router.delete('/:id', async(req, res) => {
